@@ -9,8 +9,34 @@ export default {
   theme: {
     extend: {
       colors: {
-        background: "var(--background)",
-        foreground: "var(--foreground)",
+        // Reference CSS variables directly
+        "accent-1": "var(--blue-1)",
+        "accent-2": "var(--blue-2)",
+        "accent-3": "var(--blue-3)",
+        "accent-4": "var(--blue-4)",
+        "accent-5": "var(--blue-5)",
+        "accent-6": "var(--blue-6)",
+        "accent-7": "var(--blue-7)",
+        "accent-8": "var(--blue-8)",
+        "accent-9": "var(--blue-9)",
+        "accent-10": "var(--blue-10)",
+        "accent-11": "var(--blue-11)",
+        "accent-12": "var(--blue-12)",
+
+        "gray-1": "var(--gray-1)",
+        "gray-2": "var(--gray-2)",
+        "gray-3": "var(--gray-3)",
+        "gray-4": "var(--gray-4)",
+        "gray-5": "var(--gray-5)",
+        "gray-6": "var(--gray-6)",
+        "gray-7": "var(--gray-7)",
+        "gray-8": "var(--gray-8)",
+        "gray-9": "var(--gray-9)",
+        "gray-10": "var(--gray-10)",
+        "gray-11": "var(--gray-11)",
+        "gray-12": "var(--gray-12)",
+
+        background: "var(--color-background)",
       },
     },
   },

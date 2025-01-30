@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import { Roboto } from "next/font/google";
 import "@radix-ui/themes/styles.css";
-import "./globals.css";
 import "./colors.css";
+import "./globals.css";
 import { ThemeProvider } from "@/context/ThemeContext";
 
 const roboto = Roboto({

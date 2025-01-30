@@ -12,9 +12,9 @@ function ChatMessages() {
         <div className="text-center py-4 mb-auto">
           <Heading>Chatbot</Heading>
         </div>
-        <div className="flex flex-col border border-red-500 max-h-[80dvh] overflow-auto">
+        <div className="flex flex-col max-h-[82dvh] overflow-auto">
           <UserMessage message={placeHolderMsg} />
-          <AssitantMessage message={placeHolderMsg} />
+          <AssitantMessage />
         </div>
       </div>
     );
@@ -62,7 +62,7 @@ function UserMessage({ message, role }: MessageProps) {
   );
 }
 
-function AssitantMessage({ message, role }: MessageProps) {
+function AssitantMessage() {
   return (
     <article
       className="w-full scroll-mb-[var(--thread-trailing-height,150px)] text-token-text-primary focus-visible:outline-2 focus-visible:outline-offset-[-4px]"
