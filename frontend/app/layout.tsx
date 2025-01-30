@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Roboto } from "next/font/google";
 import "@radix-ui/themes/styles.css";
 import "./globals.css";
+import "./colors.css";
 import { ThemeProvider } from "@/context/ThemeContext";
 
 const roboto = Roboto({
@@ -21,12 +22,8 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body
-        className={`${roboto.className} antialiased`}
-      >
-        <ThemeProvider>
-          {children}
-        </ThemeProvider>
+      <body className={`${roboto.className} antialiased`}>
+        <ThemeProvider>{children}</ThemeProvider>
       </body>
     </html>
   );
