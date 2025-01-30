@@ -16,7 +16,9 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
   // set a theme to what the system saved, or sets it to dark
   const [theme, setTheme] = useState<"light" | "dark">(() => {
     const savedTheme = localStorage.getItem("theme") as "light" | "dark";
-    return savedTheme;
+    return savedTheme === "light" || savedTheme === "dark"
+      ? savedTheme
+      : "dark";
   });
 
   // update localStorage whenever theme changes

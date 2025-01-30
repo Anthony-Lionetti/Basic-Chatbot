@@ -25,8 +25,8 @@ export const Sidebar = ({ conversations = [] }: SidebarProps) => {
       {/* Toggle Button */}
       <button
         onClick={toggleSidebar}
-        className="absolute -right-3 top-4 bg-white rounded-full p-1.5 
-                 shadow-md border border-gray-5 hover:bg-gray-50 z-10"
+        className="absolute -right-3 top-4 bg-gray-1 rounded-full p-1.5 
+                 shadow-md border border-gray-5 hover:bg-gray-2 z-10"
       >
         {isOpen ? (
           <ChevronLeftIcon className="h-4 w-4 text-gray-12" />

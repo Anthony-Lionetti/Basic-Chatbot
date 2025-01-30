@@ -1,12 +1,11 @@
-import { ChatInput } from '@/components/ChatInput';
-import { Sidebar } from '@/components/Sidebar';
-import ChatMessages from '@/components/ChatMessages';
-import { Flex } from '@radix-ui/themes';
+import { ChatInput } from "@/components/ChatInput";
+import { Sidebar } from "@/components/Sidebar";
+import ChatMessages from "@/components/ChatMessages";
+import { Flex } from "@radix-ui/themes";
 
 export default function ChatInterface() {
-
   return (
-    <Flex height="100vh">
+    <section className="bg-background h-[100vh]">
       {/* Sidebar */}
       <Sidebar />
 
@@ -18,6 +17,6 @@ export default function ChatInterface() {
         {/* Input Area */}
         <ChatInput />
       </Flex>
-    </Flex>
+    </section>
   );
 }
