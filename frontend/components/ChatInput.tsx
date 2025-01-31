@@ -3,11 +3,7 @@ import { useState, useRef, useEffect } from "react";
 import { IconButton } from "@radix-ui/themes";
 import { CameraIcon, PaperPlaneIcon } from "@radix-ui/react-icons";
 
-export const ChatInput = ({
-  onSend,
-}: {
-  onSend?: (message: string) => void;
-}) => {
+export const ChatInput = () => {
   const [message, setMessage] = useState("");
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
@@ -19,11 +15,13 @@ export const ChatInput = ({
     }
   }, [message]);
 
-  const handleSubmit = (e?: React.FormEvent) => {
-    e?.preventDefault();
+  const handleSubmit = () => {
     const trimmedMessage = message.trim();
-    if (trimmedMessage) {
-      onSend(trimmedMessage);
+    try {
+      console.log("Sending message: ", trimmedMessage);
+    } catch (err) {
+      console.log("Error: ", err);
+    } finally {
       setMessage("");
     }
   };
@@ -61,6 +59,7 @@ export const ChatInput = ({
                 variant="soft"
                 color="blue"
                 disabled={!message.trim()}
+                onClick={handleSubmit}
               >
                 <PaperPlaneIcon className="w-4 h-4" />
               </IconButton>

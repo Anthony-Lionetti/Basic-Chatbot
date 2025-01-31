@@ -14,6 +14,7 @@
     "@radix-ui/react-primitive": "^2.0.1",
     "@radix-ui/themes": "^3.2.0",
     "autoprefixer": "^10.4.20",
+    "groq-sdk": "^0.13.0",
     "next": "15.1.6",
     "postcss-import": "^16.1.0",
     "react": "^19.0.0",

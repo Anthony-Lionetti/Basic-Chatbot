@@ -3,19 +3,31 @@ import React from "react";
 import { useChats } from "@/context/ChatProvider";
 import { MagicWandIcon } from "@radix-ui/react-icons";
 import { IconButton } from "@radix-ui/themes";
-import { ChatMessage, ChatRole } from "@/types/chat";
+import {
+  ChatCompletion,
+  UserMessage as ChatUserMessage,
+  ChatRole,
+} from "@/types/chat";
 
 function ChatMessages() {
   const chatHistory = useChats();
   return (
     <>
       {chatHistory.map((turn) => {
-        return (
-          <MessageWrapper key={turn.id} role={turn.role}>
-            {turn.role == "User" && <UserMessage {...turn} />}
-            {turn.role == "Assistant" && <AssitantMessage {...turn} />}
-          </MessageWrapper>
-        );
+        // check if role exsists on turn. If yes it is a user message
+        if ("role" in turn) {
+          return (
+            <MessageWrapper key={turn.id} role={turn.role}>
+              <UserMessage {...turn} />
+            </MessageWrapper>
+          );
+        } else {
+          return (
+            <MessageWrapper key={turn.id} role={turn.choices[0].message.role}>
+              <AssitantMessage {...turn} />
+            </MessageWrapper>
+          );
+        }
       })}
     </>
   );
@@ -41,7 +53,7 @@ function MessageWrapper({ children, role }: MessageWrapperProps) {
   );
 }
 
-function UserMessage({ content, role }: ChatMessage) {
+function UserMessage({ content, role }: ChatUserMessage) {
   return (
     <div className="relative flex w-full min-w-0 flex-col">
       <div className="flex-col gap-1 md:gap-3">
@@ -62,7 +74,9 @@ function UserMessage({ content, role }: ChatMessage) {
   );
 }
 
-function AssitantMessage({ content, role }: ChatMessage) {
+function AssitantMessage(completion: ChatCompletion) {
+  const role = completion.choices[0].message.role;
+  const content = completion.choices[0].message.content;
   return (
     <>
       <div className="flex-shrink-0 flex flex-col relative items-end">

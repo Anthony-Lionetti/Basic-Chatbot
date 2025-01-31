@@ -1,7 +1,11 @@
-export type ChatRole = "User" | "Assistant";
-export type ChatContent = string;
-export interface ChatMessage {
+import Groq from "groq-sdk";
+
+export type ChatRole = Groq.Chat.ChatCompletionRole;
+export type ChatCompletion = Groq.Chat.ChatCompletion;
+export interface UserMessage {
   id: string;
-  role: ChatRole;
-  content: ChatContent;
+  role: "user";
+  content: string;
 }
+
+export type ChatMessage = ChatCompletion | UserMessage;
