@@ -9,7 +9,6 @@ export async function POST(req: Request) {
     // Add message to chat history
     const response = await groqRequest([...data.chatHistory, newMessage]);
 
-    // console.log(response);
     return Response.json({ status: 200, response: response });
   } catch (err) {
     console.error(err);

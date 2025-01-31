@@ -1,7 +1,7 @@
 "use client";
 import { useState, useRef, useEffect } from "react";
 import { IconButton } from "@radix-ui/themes";
-import { CameraIcon, PaperPlaneIcon } from "@radix-ui/react-icons";
+import { CameraIcon, PaperPlaneIcon, UploadIcon } from "@radix-ui/react-icons";
 import { useChatDispatch, useChats } from "@/context/ChatProvider";
 import { v4 as uuidv4 } from "uuid";
 
@@ -77,14 +77,18 @@ export const ChatInput = () => {
           />
           {/* Controls */}
           <div className="flex flex-row pb-2 px-3 justify-between">
-            <div className="flex flex-row justify-start gap-2"></div>
-            <div className="flex flex-row justify-end gap-2">
+            <div className="flex flex-row justify-start gap-2">
+              <IconButton size={"2"} color="blue" variant="soft" disabled>
+                <UploadIcon className="h-4 w-4" />
+              </IconButton>
               <IconButton size={"2"} color="blue" variant="soft" disabled>
                 <CameraIcon className="w-4 h-4" />
               </IconButton>
+            </div>
+            <div className="flex flex-row justify-end gap-2">
               <IconButton
                 size="2"
-                variant="soft"
+                variant="solid"
                 color="blue"
                 disabled={!message.trim()}
                 onClick={handleSubmit}

@@ -3,16 +3,20 @@ import Groq from "groq-sdk";
 
 const groq = new Groq({ apiKey: process.env.GROQ_API_KEY });
 
-export async function groqRequest(messages: ChatMessage[]) {
+export async function groqRequest(
+  messages: ChatMessage[],
+  model: string = "llama-3.3-70b-versatile",
+  stream: boolean = false
+) {
   const transformedMessages = transformMessages(messages);
 
   const chatCompletion = await groq.chat.completions.create({
     messages: transformedMessages,
-    model: "llama-3.3-70b-versatile",
+    model: model,
     temperature: 1,
     max_completion_tokens: 1024,
     top_p: 1,
-    stream: false,
+    stream: stream,
     stop: null,
   });
 
