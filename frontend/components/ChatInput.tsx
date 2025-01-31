@@ -2,8 +2,12 @@
 import { useState, useRef, useEffect } from "react";
 import { IconButton } from "@radix-ui/themes";
 import { CameraIcon, PaperPlaneIcon } from "@radix-ui/react-icons";
+import { useChatDispatch, useChats } from "@/context/ChatProvider";
+import { v4 as uuidv4 } from "uuid";
 
 export const ChatInput = () => {
+  const dispatch = useChatDispatch();
+  const chats = useChats();
   const [message, setMessage] = useState("");
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
@@ -18,7 +22,31 @@ export const ChatInput = () => {
   const handleSubmit = () => {
     const trimmedMessage = message.trim();
     try {
-      console.log("Sending message: ", trimmedMessage);
+      // Send messages to state
+      dispatch({
+        type: "add",
+        completion: { id: uuidv4(), role: "user", content: trimmedMessage },
+      });
+
+      // Make Post request to endpoint with chat messages
+      fetch("/api/chat", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          chatHistory: chats,
+          message: trimmedMessage,
+        }),
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          // add the response to the chat context
+          dispatch({ type: "add", completion: data.response });
+        })
+        .catch((error) => {
+          console.error("Error:", error);
+        });
     } catch (err) {
       console.log("Error: ", err);
     } finally {

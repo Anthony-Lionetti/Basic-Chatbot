@@ -29,6 +29,14 @@ export function useChats() {
   return context;
 }
 
+export function useChatDispatch() {
+  const context = useContext(ChatDispatch);
+  if (context == null) {
+    throw new Error("useChatDispatch must be used within a ChatProviers");
+  }
+  return context;
+}
+
 function chatReducer(chats: ChatMessage[], action: Action): ChatMessage[] {
   switch (action.type) {
     case "add": {

@@ -4,12 +4,15 @@ import { groqRequest } from "../(service)/groq";
 export async function POST(req: Request) {
   try {
     const data = await req.json();
-    const response = groqRequest(data);
+    // get new message
+    const newMessage = { role: "user", content: data.message };
+    // Add message to chat history
+    const response = await groqRequest([...data.chatHistory, newMessage]);
 
-    console.log(response);
-    return new Response("Success!");
+    // console.log(response);
+    return Response.json({ status: 200, response: response });
   } catch (err) {
     console.error(err);
-    return new Response("An Error Occurred");
+    return Response.json({ status: 500, message: "Error" });
   }
 }
