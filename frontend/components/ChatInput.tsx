@@ -1,7 +1,7 @@
 "use client";
 import { useState, useRef, useEffect } from "react";
 import { IconButton } from "@radix-ui/themes";
-import { PaperPlaneIcon } from "@radix-ui/react-icons";
+import { CameraIcon, PaperPlaneIcon } from "@radix-ui/react-icons";
 
 export const ChatInput = ({
   onSend,
@@ -38,28 +38,33 @@ export const ChatInput = ({
   return (
     <div className="w-[50%] mx-auto fixed bottom-0 left-0 right-0">
       <div className="max-w-3xl mx-auto p-4">
-        <div className="w-full border-2 border-gray-8 rounded-md">
+        <div className="w-full border-2 border-gray-8 bg-gray-2 rounded-lg">
+          {/* Text Input */}
           <textarea
             ref={textareaRef}
             value={message}
             onChange={(e) => setMessage(e.target.value)}
             onKeyDown={handleKeyDown}
             placeholder="Type your message..."
-            className="px-3 pt-1 w-full resize-none min-h-[44px] max-h-[200px] focus:outline-none border border-red-500"
-            rows={1}
+            className="bg-transparent px-3 pt-2 w-full resize-none min-h-[44px] max-h-[200px] focus:outline-none"
+            rows={2}
           />
           {/* Controls */}
-          <div className="flex flex-row pb-1 px-3 justify-between border border-blue-500">
-            <div></div>
-            <IconButton
-              size="2"
-              variant="soft"
-              color="blue"
-              disabled={!message.trim()}
-              className="transition-opacity hover:opacity-80"
-            >
-              <PaperPlaneIcon className="w-4 h-4" />
-            </IconButton>
+          <div className="flex flex-row pb-2 px-3 justify-between">
+            <div className="flex flex-row justify-start gap-2"></div>
+            <div className="flex flex-row justify-end gap-2">
+              <IconButton size={"2"} color="blue" variant="soft" disabled>
+                <CameraIcon className="w-4 h-4" />
+              </IconButton>
+              <IconButton
+                size="2"
+                variant="soft"
+                color="blue"
+                disabled={!message.trim()}
+              >
+                <PaperPlaneIcon className="w-4 h-4" />
+              </IconButton>
+            </div>
           </div>
         </div>
         <div className="mt-2 text-center">

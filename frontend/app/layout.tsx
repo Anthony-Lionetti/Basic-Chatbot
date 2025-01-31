@@ -3,7 +3,7 @@ import { Roboto } from "next/font/google";
 import "@radix-ui/themes/styles.css";
 import "./colors.css";
 import "./globals.css";
-import { ThemeProvider } from "@/context/ThemeContext";
+import Provider from "@/context/Provider";
 
 const roboto = Roboto({
   weight: ["400", "500", "700", "900"],
@@ -23,7 +23,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${roboto.className} antialiased`}>
-        <ThemeProvider>{children}</ThemeProvider>
+        <Provider>{children}</Provider>
       </body>
     </html>
   );

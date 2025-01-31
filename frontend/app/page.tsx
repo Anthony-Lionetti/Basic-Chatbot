@@ -1,7 +1,7 @@
 import { ChatInput } from "@/components/ChatInput";
 import { Sidebar } from "@/components/Sidebar";
-import ChatMessages from "@/components/ChatMessages";
 import { Flex } from "@radix-ui/themes";
+import ChatWrapper from "@/components/ChatWrapper";
 
 export default function ChatInterface() {
   return (
@@ -10,9 +10,9 @@ export default function ChatInterface() {
       <Sidebar />
 
       {/* Main Chat Area */}
-      <Flex direction="column" flexGrow="1">
+      <Flex direction="column" flexGrow="1" height={"full"}>
         {/* Chat Messages */}
-        <ChatMessages />
+        <ChatWrapper />
 
         {/* Input Area */}
         <ChatInput />
