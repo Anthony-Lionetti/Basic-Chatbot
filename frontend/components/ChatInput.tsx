@@ -19,8 +19,9 @@ export const ChatInput = () => {
     }
   }, [message]);
 
-  const handleSubmit = () => {
+  async function handleSubmit() {
     const trimmedMessage = message.trim();
+    dispatch({ type: "setStreaming" });
     try {
       // Send messages to state
       dispatch({
@@ -29,30 +30,66 @@ export const ChatInput = () => {
       });
 
       // Make Post request to endpoint with chat messages
-      fetch("/api/chat", {
+      const response = await fetch("/api/chat", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          chatHistory: chats,
+          chatHistory: chats.chatMessages,
           message: trimmedMessage,
+          model: undefined,
         }),
-      })
-        .then((response) => response.json())
-        .then((data) => {
-          // add the response to the chat context
-          dispatch({ type: "add", completion: data.response });
-        })
-        .catch((error) => {
-          console.error("Error:", error);
-        });
+      });
+
+      if (!response.body) {
+        throw Error("Response body is empty.");
+      }
+
+      const reader = response.body.getReader();
+      const decoder = new TextDecoder();
+      let buffer = "";
+      setMessage("");
+
+      // While tokens are still being generated
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+
+        buffer += decoder.decode(value, { stream: true });
+        const lines = buffer.split("\n\n");
+        buffer = lines.pop() || "";
+
+        for (const line of lines) {
+          if (line.startsWith("data: ")) {
+            const content = line.replace("data: ", "");
+            if (content === "[DONE]") break;
+            dispatch({
+              type: "appendResponseChunk",
+              message: content,
+            });
+          }
+        }
+      }
+
+      // Add final output to
+      const finalOutput = chats.streamingMessage;
+      dispatch({
+        type: "add",
+        completion: {
+          id: uuidv4(),
+          role: "assistant",
+          content: finalOutput,
+        },
+      });
     } catch (err) {
       console.log("Error: ", err);
     } finally {
-      setMessage("");
+      dispatch({ type: "setStreaming" });
+      // reset the streaming chunk
+      dispatch({ type: "resetResponse" });
     }
-  };
+  }
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === "Enter" && !e.shiftKey) {
@@ -72,7 +109,7 @@ export const ChatInput = () => {
             onChange={(e) => setMessage(e.target.value)}
             onKeyDown={handleKeyDown}
             placeholder="Type your message..."
-            className="bg-transparent px-3 pt-2 w-full resize-none min-h-[44px] max-h-[200px] focus:outline-none"
+            className={`bg-transparent px-3 pt-2 w-full resize-none min-h-[44px] max-h-[200px] focus:outline-none`}
             rows={2}
           />
           {/* Controls */}
@@ -90,7 +127,7 @@ export const ChatInput = () => {
                 size="2"
                 variant="solid"
                 color="blue"
-                disabled={!message.trim()}
+                disabled={!message.trim() || chats.isStreaming}
                 onClick={handleSubmit}
               >
                 <PaperPlaneIcon className="w-4 h-4" />
