@@ -1,7 +1,7 @@
 "use client";
 import { useState, useRef, useEffect } from "react";
 import { IconButton } from "@radix-ui/themes";
-import { CameraIcon, PaperPlaneIcon } from "@radix-ui/react-icons";
+import { CameraIcon, PaperPlaneIcon, UploadIcon } from "@radix-ui/react-icons";
 import { useChatDispatch, useChats } from "@/context/ChatProvider";
 import { v4 as uuidv4 } from "uuid";
 
@@ -19,8 +19,9 @@ export const ChatInput = () => {
     }
   }, [message]);
 
-  const handleSubmit = () => {
+  async function handleSubmit() {
     const trimmedMessage = message.trim();
+    dispatch({ type: "setStreaming" });
     try {
       // Send messages to state
       dispatch({
@@ -29,30 +30,85 @@ export const ChatInput = () => {
       });
 
       // Make Post request to endpoint with chat messages
-      fetch("/api/chat", {
+      const response = await fetch("/api/chat", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          chatHistory: chats,
+          chatHistory: chats.chatMessages,
           message: trimmedMessage,
+          model: undefined,
         }),
-      })
-        .then((response) => response.json())
-        .then((data) => {
-          // add the response to the chat context
-          dispatch({ type: "add", completion: data.response });
-        })
-        .catch((error) => {
-          console.error("Error:", error);
-        });
+      });
+
+      if (!response.body) {
+        throw Error("Response body is empty.");
+      }
+
+      const reader = response.body.getReader();
+      const decoder = new TextDecoder();
+      let buffer = "";
+      let accumulatedMessage = "";
+      setMessage("");
+
+      // While tokens are still being generated
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+
+        buffer += decoder.decode(value, { stream: true });
+        const lines = buffer.split("\n\n");
+        buffer = lines.pop() || "";
+
+        for (const line of lines) {
+          if (line.startsWith("data: ")) {
+            const content = line.replace("data: ", "");
+            if (content === "[DONE]") break;
+
+            accumulatedMessage += content; // Accumulate locally
+            dispatch({
+              type: "appendResponseChunk",
+              message: content,
+            });
+          }
+        }
+      }
+
+      // process any remaining data in buffer after loop
+      if (buffer) {
+        const lines = buffer.split("\n\n");
+        for (const line of lines) {
+          if (!line.startsWith("data: ")) continue;
+
+          const content = line.replace("data: ", "");
+          if (content === "[DONE]") break;
+
+          accumulatedMessage += content; // Add remaining content
+          dispatch({
+            type: "appendResponseChunk",
+            message: content,
+          });
+        }
+      }
+
+      // Add final output to
+      dispatch({
+        type: "add",
+        completion: {
+          id: uuidv4(),
+          role: "assistant",
+          content: accumulatedMessage,
+        },
+      });
     } catch (err) {
       console.log("Error: ", err);
     } finally {
-      setMessage("");
+      dispatch({ type: "setStreaming" });
+      // reset the streaming chunk
+      dispatch({ type: "resetResponse" });
     }
-  };
+  }
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === "Enter" && !e.shiftKey) {
@@ -72,21 +128,25 @@ export const ChatInput = () => {
             onChange={(e) => setMessage(e.target.value)}
             onKeyDown={handleKeyDown}
             placeholder="Type your message..."
-            className="bg-transparent px-3 pt-2 w-full resize-none min-h-[44px] max-h-[200px] focus:outline-none"
+            className={`bg-transparent px-3 pt-2 w-full resize-none min-h-[44px] max-h-[200px] focus:outline-none`}
             rows={2}
           />
           {/* Controls */}
           <div className="flex flex-row pb-2 px-3 justify-between">
-            <div className="flex flex-row justify-start gap-2"></div>
-            <div className="flex flex-row justify-end gap-2">
+            <div className="flex flex-row justify-start gap-2">
+              <IconButton size={"2"} color="blue" variant="soft" disabled>
+                <UploadIcon className="h-4 w-4" />
+              </IconButton>
               <IconButton size={"2"} color="blue" variant="soft" disabled>
                 <CameraIcon className="w-4 h-4" />
               </IconButton>
+            </div>
+            <div className="flex flex-row justify-end gap-2">
               <IconButton
                 size="2"
-                variant="soft"
+                variant="solid"
                 color="blue"
-                disabled={!message.trim()}
+                disabled={!message.trim() || chats.isStreaming}
                 onClick={handleSubmit}
               >
                 <PaperPlaneIcon className="w-4 h-4" />

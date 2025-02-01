@@ -1,10 +1,13 @@
 import React, { createContext, useContext, useReducer } from "react";
-import { ChatMessage } from "@/types/chat";
+import { ChatDetails, ChatMessage } from "@/types/chat";
 
-type Action = { type: "add"; completion: ChatMessage };
-//   | { type: "erase"; id: string };
+type Action =
+  | { type: "add"; completion: ChatMessage }
+  | { type: "setStreaming" }
+  | { type: "appendResponseChunk"; message: string }
+  | { type: "resetResponse" };
 
-const ChatContext = createContext<ChatMessage[] | null>(null);
+const ChatContext = createContext<ChatDetails | null>(null);
 const ChatDispatch = createContext<React.Dispatch<Action> | null>(null);
 
 export default function ChatProvider({
@@ -37,10 +40,31 @@ export function useChatDispatch() {
   return context;
 }
 
-function chatReducer(chats: ChatMessage[], action: Action): ChatMessage[] {
+function chatReducer(chats: ChatDetails, action: Action): ChatDetails {
   switch (action.type) {
     case "add": {
-      return [...chats, action.completion];
+      return {
+        ...chats,
+        chatMessages: [...chats.chatMessages, action.completion],
+      };
+    }
+    case "setStreaming": {
+      return {
+        ...chats,
+        isStreaming: !chats.isStreaming,
+      };
+    }
+    case "appendResponseChunk": {
+      return {
+        ...chats,
+        streamingMessage: chats.streamingMessage + action.message,
+      };
+    }
+    case "resetResponse": {
+      return {
+        ...chats,
+        streamingMessage: "",
+      };
     }
     default: {
       throw new Error("Unknown action: " + (action as Action).type);
@@ -48,4 +72,8 @@ function chatReducer(chats: ChatMessage[], action: Action): ChatMessage[] {
   }
 }
 
-const initialChat: ChatMessage[] = [];
+const initialChat: ChatDetails = {
+  isStreaming: false,
+  streamingMessage: "",
+  chatMessages: [],
+};
