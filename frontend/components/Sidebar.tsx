@@ -26,7 +26,7 @@ export const Sidebar = () => {
       {/* Toggle Button */}
       <button
         onClick={toggleSidebar}
-        className="absolute -right-3 top-5 bg-gray-1 rounded-full p-1.5 
+        className="absolute -right-4 top-5 bg-gray-1 rounded-full p-1.5 
                  shadow-md border border-gray-5 hover:bg-gray-2 z-10"
       >
         {isOpen ? (
