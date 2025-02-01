@@ -49,6 +49,7 @@ export const ChatInput = () => {
       const reader = response.body.getReader();
       const decoder = new TextDecoder();
       let buffer = "";
+      let accumulatedMessage = "";
       setMessage("");
 
       // While tokens are still being generated
@@ -64,6 +65,8 @@ export const ChatInput = () => {
           if (line.startsWith("data: ")) {
             const content = line.replace("data: ", "");
             if (content === "[DONE]") break;
+
+            accumulatedMessage += content; // Accumulate locally
             dispatch({
               type: "appendResponseChunk",
               message: content,
@@ -72,14 +75,30 @@ export const ChatInput = () => {
         }
       }
 
+      // process any remaining data in buffer after loop
+      if (buffer) {
+        const lines = buffer.split("\n\n");
+        for (const line of lines) {
+          if (!line.startsWith("data: ")) continue;
+
+          const content = line.replace("data: ", "");
+          if (content === "[DONE]") break;
+
+          accumulatedMessage += content; // Add remaining content
+          dispatch({
+            type: "appendResponseChunk",
+            message: content,
+          });
+        }
+      }
+
       // Add final output to
-      const finalOutput = chats.streamingMessage;
       dispatch({
         type: "add",
         completion: {
           id: uuidv4(),
           role: "assistant",
-          content: finalOutput,
+          content: accumulatedMessage,
         },
       });
     } catch (err) {
