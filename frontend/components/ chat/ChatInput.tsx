@@ -116,9 +116,23 @@ export const ChatInput = () => {
       handleSubmit();
     }
   };
+  const chatPosition =
+    chats.chatMessages.length === 0
+      ? "w-[50%] mx-auto fixed top-1/2 -translate-y-[50%] left-0 right-0"
+      : "w-[50%] mx-auto fixed bottom-0 left-0 right-0";
 
   return (
-    <div className="w-[50%] mx-auto fixed bottom-0 left-0 right-0">
+    <div className={chatPosition}>
+      {chats.chatMessages.length === 0 && (
+        <div className="flex flex-col justify-center gap-2 pb-4">
+          <h3 className="text-center text-4xl font-bold text-accent-9">
+            Stealth Chatbot
+          </h3>
+          <p className="text-center text-xl font-semibold text-accent-12">
+            How can we be of service today?
+          </p>
+        </div>
+      )}
       <div className="max-w-3xl mx-auto p-4">
         <div className="w-full border-2 border-gray-8 bg-gray-2 rounded-lg">
           {/* Text Input */}
@@ -131,28 +145,11 @@ export const ChatInput = () => {
             className={`bg-transparent px-3 pt-2 w-full resize-none min-h-[44px] max-h-[200px] focus:outline-none`}
             rows={2}
           />
-          {/* Controls */}
-          <div className="flex flex-row pb-2 px-3 justify-between">
-            <div className="flex flex-row justify-start gap-2">
-              <IconButton size={"2"} color="blue" variant="soft" disabled>
-                <UploadIcon className="h-4 w-4" />
-              </IconButton>
-              <IconButton size={"2"} color="blue" variant="soft" disabled>
-                <CameraIcon className="w-4 h-4" />
-              </IconButton>
-            </div>
-            <div className="flex flex-row justify-end gap-2">
-              <IconButton
-                size="2"
-                variant="solid"
-                color="blue"
-                disabled={!message.trim() || chats.isStreaming}
-                onClick={handleSubmit}
-              >
-                <PaperPlaneIcon className="w-4 h-4" />
-              </IconButton>
-            </div>
-          </div>
+          <InputControls
+            message={message}
+            isStreaming={chats.isStreaming}
+            handleSubmit={handleSubmit}
+          />
         </div>
         <div className="mt-2 text-center">
           <span className="text-xs text-gray-400">
@@ -163,3 +160,38 @@ export const ChatInput = () => {
     </div>
   );
 };
+
+interface InputControlsProps {
+  message: string;
+  isStreaming: boolean;
+  handleSubmit: () => void;
+}
+function InputControls({
+  message,
+  isStreaming,
+  handleSubmit,
+}: InputControlsProps) {
+  return (
+    <div className="flex flex-row pb-2 px-3 justify-between">
+      <div className="flex flex-row justify-start gap-2">
+        <IconButton size={"2"} color="blue" variant="soft" disabled>
+          <UploadIcon className="h-4 w-4" />
+        </IconButton>
+        <IconButton size={"2"} color="blue" variant="soft" disabled>
+          <CameraIcon className="w-4 h-4" />
+        </IconButton>
+      </div>
+      <div className="flex flex-row justify-end gap-2">
+        <IconButton
+          size="2"
+          variant="solid"
+          color="blue"
+          disabled={!message.trim() || isStreaming}
+          onClick={handleSubmit}
+        >
+          <PaperPlaneIcon className="w-4 h-4" />
+        </IconButton>
+      </div>
+    </div>
+  );
+}

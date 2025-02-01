@@ -1,7 +1,7 @@
-import { ChatInput } from "@/components/ChatInput";
+import { ChatInput } from "@/components/ chat/ChatInput";
 import { Sidebar } from "@/components/Sidebar";
 import { Flex } from "@radix-ui/themes";
-import ChatWrapper from "@/components/ChatWrapper";
+import ChatWrapper from "@/components/ chat/ChatWrapper";
 
 export default function ChatInterface() {
   return (
