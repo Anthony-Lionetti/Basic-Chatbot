@@ -14,7 +14,7 @@ export default function ChatWrapper() {
           <ThemeToggle />
         </div>
       </div>
-      <div className="flex flex-col max-h-[80dvh] overflow-auto">
+      <div className="flex flex-col max-h-[75dvh] overflow-auto">
         <ChatMessages />
       </div>
     </div>

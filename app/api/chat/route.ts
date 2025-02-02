@@ -27,9 +27,8 @@ export async function POST(req: Request) {
       async start(controller) {
         for await (const chunk of stream) {
           const content = chunk.choices[0]?.delta?.content || "";
-          controller.enqueue(encoder.encode(`data: ${content}\n\n`));
+          controller.enqueue(encoder.encode(content));
         }
-        controller.enqueue(encoder.encode("data: [DONE]\n\n"));
         controller.close();
       },
     });
