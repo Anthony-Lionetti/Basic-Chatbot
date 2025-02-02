@@ -1,4 +1,5 @@
 import React from "react";
+import Markdown from "react-markdown";
 import { MagicWandIcon } from "@radix-ui/react-icons";
 import { ChatUserMessage, ChatAssistantMessage } from "@/types/chat";
 import { IconButton } from "@radix-ui/themes";
@@ -62,7 +63,7 @@ function StreamingMessage({ content }: { content: string }) {
               className="min-h-8 text-message flex w-full flex-col items-end gap-2 whitespace-normal break-words text-start"
             >
               <div className="flex w-full flex-col gap-1 empty:hidden first:pt-[3px]">
-                {content}
+                <Markdown>{content}</Markdown>
               </div>
             </div>
           </div>
@@ -75,6 +76,7 @@ function StreamingMessage({ content }: { content: string }) {
 function AssitantMessage(completion: ChatAssistantMessage) {
   const role = completion.role;
   const content = completion.content;
+
   return (
     <>
       <div className="flex-shrink-0 flex flex-col relative items-end">
@@ -92,7 +94,7 @@ function AssitantMessage(completion: ChatAssistantMessage) {
               className="min-h-8 text-message flex w-full flex-col items-end gap-2 whitespace-normal break-words text-start"
             >
               <div className="flex w-full flex-col gap-1 empty:hidden first:pt-[3px]">
-                {content}
+                <Markdown>{content}</Markdown>
               </div>
             </div>
           </div>
