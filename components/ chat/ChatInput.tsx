@@ -45,12 +45,11 @@ export const ChatInput = () => {
       if (!response.body) {
         throw Error("Response body is empty.");
       }
+      setMessage("");
 
       const reader = response.body.getReader();
       const decoder = new TextDecoder();
-      let buffer = "";
       let accumulatedMessage = "";
-      setMessage("");
 
       // While tokens are still being generated
       while (true) {
