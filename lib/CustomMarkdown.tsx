@@ -58,28 +58,17 @@ export function CustomMarkdown({ content }: CustomMarkdownProps) {
         {children}
       </blockquote>
     ),
-    think: ({ children }: React.HTMLProps<HTMLElement>) => {
-      return (
-        <div className="relative my-4">
-          <div className="text-sm border border-purple-500">{children}</div>
-        </div>
-      );
-    },
+    // think: ({ children }: React.HTMLProps<HTMLElement>) => {
+    //   return (
+    //     <div className="relative my-4">
+    //       <div className="text-sm border border-purple-500">{children}</div>
+    //     </div>
+    //   );
+    // },
   };
 
   return (
-    <ReactMarkdown
-      remarkPlugins={[remarkGfm]}
-      rehypePlugins={[
-        [
-          rehypeRaw,
-          {
-            passThrough: ["think"], // Critical configuration
-          },
-        ],
-      ]}
-      components={components}
-    >
+    <ReactMarkdown remarkPlugins={[remarkGfm]} components={components}>
       {content}
     </ReactMarkdown>
   );

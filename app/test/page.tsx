@@ -1,13 +1,83 @@
 import { CustomMarkdown } from "@/lib/CustomMarkdown";
 import React from "react";
+import { Button } from "@radix-ui/themes";
+import { RocketIcon, ChevronDownIcon } from "@radix-ui/react-icons";
 
 export default function Test() {
   const content = useConstMarkdown(true);
+  const { cleaned, thoughts } = processThinkContent(content);
+  console.log(thoughts);
   return (
     <div className="mx-auto w-[50%]">
-      <CustomMarkdown content={content} />
+      <div className="my-5">
+        {/* Thought Header */}
+        <div className="flex flex-row gap-2 items-center mb-4">
+          <Button size="1">
+            <RocketIcon />
+            <span className="mx-2">Thinking</span>
+            <ChevronDownIcon />
+          </Button>
+        </div>
+        {/* Thought Container */}
+        <div className="flex flex-col gap-2 ml-4 px-2 border-l border-accent-12">
+          {thoughts.map((thought, idx) => {
+            return (
+              <p key={`thought_${idx}`} className={"text-xs text-gray-10"}>
+                {thought}
+              </p>
+            );
+          })}
+        </div>
+      </div>
+      <CustomMarkdown content={cleaned} />
     </div>
   );
+}
+
+interface ProcessedContent {
+  cleaned: string;
+  thoughts: string[];
+}
+
+function processThinkContent(streamedContent: string): ProcessedContent {
+  const thinkStart = streamedContent.indexOf("<think>");
+  const thinkEnd = streamedContent.lastIndexOf("</think>");
+
+  let cleaned = streamedContent;
+  const thoughts: string[] = [];
+
+  // Extract thoughts if `<think>` exists
+  if (thinkStart !== -1) {
+    const contentAfterStart = streamedContent.slice(
+      thinkStart + "<think>".length
+    );
+
+    // Calculate end of thoughts (use either closing tag or end of string)
+    const innerEnd =
+      thinkEnd !== -1 && thinkEnd > thinkStart
+        ? thinkEnd - (thinkStart + "<think>".length)
+        : contentAfterStart.length;
+
+    const rawThoughts = contentAfterStart.slice(0, innerEnd);
+
+    // Clean nested `<think>` tags and split into non-empty lines
+    thoughts.push(
+      ...rawThoughts
+        .replace(/<\/?think>/g, "") // Remove nested tags
+        .split(/\r?\n/) // Split into lines
+        .map((line) => line.trim()) // Trim whitespace
+        .filter((line) => line.length > 0) // Ignore empty lines
+    );
+
+    // Remove the entire `<think>...</think>` block from cleaned content
+    cleaned =
+      streamedContent.slice(0, thinkStart) +
+      (thinkEnd !== -1
+        ? streamedContent.slice(thinkEnd + "</think>".length)
+        : "");
+  }
+
+  return { cleaned, thoughts };
 }
 
 function useConstMarkdown(thinking: boolean = false) {
