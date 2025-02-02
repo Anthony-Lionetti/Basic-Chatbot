@@ -1,7 +1,13 @@
 "use client";
 import { useState, useRef, useEffect } from "react";
+import { Toggle } from "radix-ui";
 import { IconButton } from "@radix-ui/themes";
-import { CameraIcon, PaperPlaneIcon, UploadIcon } from "@radix-ui/react-icons";
+import {
+  CameraIcon,
+  MagicWandIcon,
+  PaperPlaneIcon,
+  UploadIcon,
+} from "@radix-ui/react-icons";
 import { useChatDispatch, useChats } from "@/context/ChatProvider";
 import { v4 as uuidv4 } from "uuid";
 
@@ -145,8 +151,12 @@ function InputControls({
   handleSubmit,
 }: InputControlsProps) {
   return (
-    <div className="flex flex-row pb-2 px-3 justify-between">
+    <div className="flex flex-row pb-2 px-3 justify-between items-center">
       <div className="flex flex-row justify-start gap-2">
+        <Toggle.Root className="flex flex-row gap-2 px-2 py-.75 items-center border-2 border-gray-5 rounded-md">
+          <MagicWandIcon />
+          <span className="text-sm">Reasoning</span>
+        </Toggle.Root>
         <IconButton size={"2"} color="blue" variant="soft" disabled>
           <UploadIcon className="h-4 w-4" />
         </IconButton>

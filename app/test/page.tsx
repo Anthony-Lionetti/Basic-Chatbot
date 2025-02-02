@@ -1,33 +1,43 @@
+"use client";
 import { CustomMarkdown } from "@/lib/CustomMarkdown";
-import React from "react";
+import React, { useState } from "react";
 import { Button } from "@radix-ui/themes";
-import { RocketIcon, ChevronDownIcon } from "@radix-ui/react-icons";
+import {
+  RocketIcon,
+  ChevronDownIcon,
+  ChevronUpIcon,
+} from "@radix-ui/react-icons";
+
+/// This file is specifically used to test the LLM's markdown parsing
 
 export default function Test() {
   const content = useConstMarkdown(true);
   const { cleaned, thoughts } = processThinkContent(content);
-  console.log(thoughts);
+  const [thoughtHidden, setThoughtHidden] = useState<boolean>(false);
   return (
     <div className="mx-auto w-[50%]">
       <div className="my-5">
         {/* Thought Header */}
-        <div className="flex flex-row gap-2 items-center mb-4">
-          <Button size="1">
+        <div className="flex flex-row gap-3 items-center mb-4">
+          <Button size="2" onClick={() => setThoughtHidden(!thoughtHidden)}>
             <RocketIcon />
-            <span className="mx-2">Thinking</span>
-            <ChevronDownIcon />
+            <span className="mx-2">Reasoning</span>
+            {thoughtHidden && <ChevronDownIcon />}
+            {!thoughtHidden && <ChevronUpIcon />}
           </Button>
         </div>
         {/* Thought Container */}
-        <div className="flex flex-col gap-2 ml-4 px-2 border-l border-accent-12">
-          {thoughts.map((thought, idx) => {
-            return (
-              <p key={`thought_${idx}`} className={"text-xs text-gray-10"}>
-                {thought}
-              </p>
-            );
-          })}
-        </div>
+        {!thoughtHidden && (
+          <div className="flex flex-col gap-2 px-2 border-l border-accent-12">
+            {thoughts.map((thought, idx) => {
+              return (
+                <p key={`thought_${idx}`} className={"text-xs text-gray-10"}>
+                  {thought}
+                </p>
+              );
+            })}
+          </div>
+        )}
       </div>
       <CustomMarkdown content={cleaned} />
     </div>
