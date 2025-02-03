@@ -20,6 +20,7 @@ export type ChatMessage =
 
 export interface ChatDetails {
   isStreaming: boolean;
+  isReasoning: boolean;
   streamingMessage: string;
   chatMessages: ChatMessage[];
 }
