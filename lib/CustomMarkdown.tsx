@@ -9,7 +9,6 @@ import React, {
 import ReactMarkdown, { Components } from "react-markdown";
 import flattenChildren from "react-keyed-flatten-children";
 import remarkGfm from "remark-gfm";
-import rehypeRaw from "rehype-raw";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { vscDarkPlus } from "react-syntax-highlighter/dist/esm/styles/prism";
 import { CheckIcon, CopyIcon } from "@radix-ui/react-icons";

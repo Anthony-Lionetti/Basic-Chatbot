@@ -13,10 +13,21 @@ export async function POST(req: Request) {
     const newMessage = { role: "user", content: data.message };
     const messages = transformMessages([...data.chatHistory, newMessage]);
 
+    // define necessary groq configurations based on request.
+    const modelConfig = data.isReasoning
+      ? {
+          model: "deepseek-r1-distill-llama-70b",
+          temperature: 0.6,
+          max_completion_tokens: 4096,
+          top_p: 0.95,
+          stop: null,
+        }
+      : { model: "llama3-70b-8192" };
+
     // Create stream from Groq
     const stream = await groq.chat.completions.create({
       messages: messages,
-      model: data.model || "llama3-70b-8192",
+      ...modelConfig,
       stream: true,
     });
 

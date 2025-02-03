@@ -4,6 +4,7 @@ import { ChatDetails, ChatMessage } from "@/types/chat";
 type Action =
   | { type: "add"; completion: ChatMessage }
   | { type: "setStreaming" }
+  | { type: "setReasoning" }
   | { type: "appendResponseChunk"; message: string }
   | { type: "resetResponse" };
 
@@ -54,6 +55,12 @@ function chatReducer(chats: ChatDetails, action: Action): ChatDetails {
         isStreaming: !chats.isStreaming,
       };
     }
+    case "setReasoning": {
+      return {
+        ...chats,
+        isReasoning: !chats.isReasoning,
+      };
+    }
     case "appendResponseChunk": {
       return {
         ...chats,
@@ -74,6 +81,7 @@ function chatReducer(chats: ChatDetails, action: Action): ChatDetails {
 
 const initialChat: ChatDetails = {
   isStreaming: false,
+  isReasoning: false,
   streamingMessage: "",
   chatMessages: [],
 };
