@@ -78,10 +78,21 @@ function chatReducer(chats: ChatDetails, action: Action): ChatDetails {
     }
   }
 }
+const content = `
+When writing spaced repetition prompts meant to invoke retrieval practice, you’re doing something similar to language translation. You’re asking: which tasks, when performed in aggregate, require lighting the bulbs which are activated when you have that idea “fully loaded” into your mind?
+
+The retrieval practice mechanism implies some core properties of effective prompts. We’ll review them briefly here, and the rest of this guide will illustrate them through many examples.
+
+These properties aren’t laws of nature. They’re more like rules you might learn in an English class. Good writers can (and should!) strategically break the rules of grammar to produce interesting effects. But you need to have enough experience to understand why doing something different makes sense in a given context.
+
+Retrieval practice prompts should be focused. A question or answer involving too much detail will dull your concentration and stimulate incomplete retrievals, leaving some bulbs unlit. Unfocused questions also make it harder to check whether you remembered all parts of the answer and to note places where you differed. It’s usually best to focus on one detail at a time.`;
 
 const initialChat: ChatDetails = {
   isStreaming: false,
   isReasoning: false,
   streamingMessage: "",
-  chatMessages: [],
+  chatMessages: [
+    { id: "ihoiahgo", role: "user", content: "This is a test chat" },
+    { id: "ihoiahgr", role: "assistant", content: content },
+  ],
 };
