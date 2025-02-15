@@ -18,8 +18,8 @@ export const Sidebar = () => {
   return (
     <div
       className={`
-      relative h-screen bg-gray-2 border-r border-gray-5
-      transition-all duration-300 ease-in-out
+      fixed h-screen bg-gray-2 border-r border-gray-5
+      transition-all duration-300 ease-in-out z-10
       ${isOpen ? "w-64" : "w-20"}
     `}
     >

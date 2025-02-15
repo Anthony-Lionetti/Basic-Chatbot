@@ -3,3 +3,13 @@
 
 @tailwind components;
 @tailwind utilities;
+
+::-webkit-scrollbar {
+    width: 8px; /* Adjust width as needed */
+    background: transparent; /* Make background transparent */
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--gray-10); /* Adjust color and opacity as needed */
+    border-radius: 10px; /* Make the scrollbar thumb rounded */
+}

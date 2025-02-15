@@ -1,10 +1,10 @@
 "use client";
-import { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import InputControls from "./InputControls";
 import { useChatDispatch, useChats } from "@/context/ChatProvider";
 import { v4 as uuidv4 } from "uuid";
 
-export const ChatInput = () => {
+export function ChatInput({ ref }: { ref?: React.Ref<HTMLDivElement> }) {
   const dispatch = useChatDispatch();
   const chats = useChats();
   const [message, setMessage] = useState("");
@@ -91,21 +91,21 @@ export const ChatInput = () => {
   const chatPosition =
     chats.chatMessages.length === 0
       ? "w-[50%] mx-auto fixed top-1/2 -translate-y-[50%] left-0 right-0"
-      : "w-[50%] mx-auto fixed bottom-0 left-0 right-0";
+      : "w-[50%] mx-auto py-1";
 
   return (
-    <div className={chatPosition}>
+    <div className={chatPosition} ref={ref}>
       {chats.chatMessages.length === 0 && (
         <div className="flex flex-col justify-center gap-2 pb-4">
           <h3 className="text-center text-4xl font-bold text-accent-9">
-            Stealth Chatbot
+            Chatbot
           </h3>
           <p className="text-center text-xl font-semibold text-accent-12">
             How can we be of service today?
           </p>
         </div>
       )}
-      <div className="max-w-3xl mx-auto p-4">
+      <div className="max-w-3xl mx-auto px-4">
         <div className="w-full border-2 border-gray-8 bg-gray-2 rounded-lg">
           {/* Text Input */}
           <textarea
@@ -124,11 +124,11 @@ export const ChatInput = () => {
           />
         </div>
         <div className="mt-2 text-center">
-          <span className="text-xs text-gray-400">
+          <span className="text-xs text-gray-9">
             Shift + Enter for new line • Enter to send
           </span>
         </div>
       </div>
     </div>
   );
-};
+}
