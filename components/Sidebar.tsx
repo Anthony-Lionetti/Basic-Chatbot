@@ -19,7 +19,7 @@ export const Sidebar = () => {
     <div
       className={`
       fixed h-screen bg-gray-2 border-r border-gray-5
-      transition-all duration-300 ease-in-out
+      transition-all duration-300 ease-in-out z-10
       ${isOpen ? "w-64" : "w-20"}
     `}
     >

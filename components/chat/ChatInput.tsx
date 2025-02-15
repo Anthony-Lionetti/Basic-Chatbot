@@ -4,7 +4,7 @@ import InputControls from "./InputControls";
 import { useChatDispatch, useChats } from "@/context/ChatProvider";
 import { v4 as uuidv4 } from "uuid";
 
-export function ChatInput({ ref }: { ref: React.Ref<HTMLInputElement> }) {
+export function ChatInput({ ref }: { ref?: React.Ref<HTMLDivElement> }) {
   const dispatch = useChatDispatch();
   const chats = useChats();
   const [message, setMessage] = useState("");
@@ -91,7 +91,7 @@ export function ChatInput({ ref }: { ref: React.Ref<HTMLInputElement> }) {
   const chatPosition =
     chats.chatMessages.length === 0
       ? "w-[50%] mx-auto fixed top-1/2 -translate-y-[50%] left-0 right-0"
-      : "w-[50%] mx-auto";
+      : "w-[50%] mx-auto py-1";
 
   return (
     <div className={chatPosition} ref={ref}>
@@ -105,7 +105,7 @@ export function ChatInput({ ref }: { ref: React.Ref<HTMLInputElement> }) {
           </p>
         </div>
       )}
-      <div className="max-w-3xl mx-auto px-4 pb-0">
+      <div className="max-w-3xl mx-auto px-4">
         <div className="w-full border-2 border-gray-8 bg-gray-2 rounded-lg">
           {/* Text Input */}
           <textarea
@@ -124,7 +124,7 @@ export function ChatInput({ ref }: { ref: React.Ref<HTMLInputElement> }) {
           />
         </div>
         <div className="mt-2 text-center">
-          <span className="text-xs text-gray-400">
+          <span className="text-xs text-gray-9">
             Shift + Enter for new line • Enter to send
           </span>
         </div>

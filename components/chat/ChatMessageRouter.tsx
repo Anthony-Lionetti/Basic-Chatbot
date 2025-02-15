@@ -36,7 +36,7 @@ function UserMessage({ content, role }: ChatUserMessage) {
             className="min-h-8 flex w-full flex-col items-end gap-2 whitespace-normal break-words text-start"
           >
             <div className="flex w-full flex-col gap-1 empty:hidden items-end rtl:items-start">
-              <div className="relative max-w-[70%] rounded-3xl bg-token-message-surface px-5 py-2.5">
+              <div className="relative max-w-[70%] rounded-lg bg-gray-3 px-5 py-2.5">
                 <div className="whitespace-pre-wrap">{content}</div>
               </div>
             </div>
@@ -93,7 +93,7 @@ function AssitantMessage(completion: ChatAssistantMessage) {
           </IconButton>
         </div>
       </div>
-      <div className="relative flex w-full min-w-0 flex-col">
+      <div className="relative w-full min-w-0 flex-col">
         <div className="flex-col gap-1 md:gap-3">
           <div className="flex max-w-full flex-col flex-grow">
             <div
