@@ -3,8 +3,11 @@ import React, { useState, useRef, useEffect } from "react";
 import InputControls from "./InputControls";
 import { useChatDispatch, useChats } from "@/context/ChatProvider";
 import { v4 as uuidv4 } from "uuid";
+import { usePathname } from "next/navigation";
 
 export function ChatInput({ ref }: { ref?: React.Ref<HTMLDivElement> }) {
+  const path = usePathname();
+  console.log("Path:", path);
   const dispatch = useChatDispatch();
   const chats = useChats();
   const [message, setMessage] = useState("");
@@ -98,7 +101,7 @@ export function ChatInput({ ref }: { ref?: React.Ref<HTMLDivElement> }) {
       {chats.chatMessages.length === 0 && (
         <div className="flex flex-col justify-center gap-2 pb-4">
           <h3 className="text-center text-4xl font-bold text-accent-9">
-            Chatbot
+            {path === "/" ? "Chatbot" : "Assistant"}
           </h3>
           <p className="text-center text-xl font-semibold text-accent-12">
             How can we be of service today?
@@ -121,6 +124,7 @@ export function ChatInput({ ref }: { ref?: React.Ref<HTMLDivElement> }) {
             message={message}
             isStreaming={chats.isStreaming}
             handleSubmit={handleSubmit}
+            service={path === "/" ? "chat" : "assistant"}
           />
         </div>
         <div className="mt-2 text-center">

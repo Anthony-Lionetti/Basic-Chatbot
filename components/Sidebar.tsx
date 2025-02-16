@@ -8,11 +8,13 @@ import {
 } from "@radix-ui/react-icons";
 import Link from "next/link";
 import { Avatar, Card, Tooltip } from "@radix-ui/themes";
+import { usePathname } from "next/navigation";
 
-export const Sidebar = () => {
+export function Sidebar() {
   const conversations = useMockHistory();
   const [isHovered, setIsHovered] = useState(false);
   const [isPinned, setIsPinned] = useState(false);
+  const path = usePathname();
 
   const toggleSidebar = () => setIsHovered(!isHovered);
 
@@ -36,7 +38,7 @@ export const Sidebar = () => {
             className="flex flex-1 flex-row gap-1 w-auto items-end mb-12"
           >
             <h2 className="top-4 text-left text-xl font-bold text-gray-12">
-              Chatbot
+              {path == "/" ? "Chatbot" : "Assistant"}
             </h2>
           </Link>
 
@@ -65,9 +67,7 @@ export const Sidebar = () => {
         <div className="flex-1 space-y-1 overflow-y-auto mt-12">
           {isOpen && (
             <>
-              <h4 className="text-lg font-semibold gray-12 mb-2">
-                Chat History
-              </h4>
+              <h4 className="text-lg font-semibold gray-12 mb-2">History</h4>
 
               <div className="flex flex-col gap-2">
                 {conversations.map((convo, idx) => {
@@ -106,7 +106,7 @@ export const Sidebar = () => {
       </div>
     </div>
   );
-};
+}
 
 function useMockHistory() {
   const history = [
