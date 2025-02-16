@@ -20,6 +20,7 @@
     "autoprefixer": "^10.4.20",
     "groq-sdk": "^0.13.0",
     "next": "15.1.6",
+    "openai": "^4.85.1",
     "postcss-import": "^16.1.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
