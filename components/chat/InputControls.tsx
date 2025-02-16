@@ -1,7 +1,7 @@
 "use client";
 import React from "react";
 import { Toggle } from "radix-ui";
-import { IconButton } from "@radix-ui/themes";
+import { IconButton, Tooltip } from "@radix-ui/themes";
 import {
   CameraIcon,
   MagicWandIcon,
@@ -26,22 +26,31 @@ export default function InputControls({
   return (
     <div className="flex flex-row pb-2 px-3 justify-between items-center">
       <div className="flex flex-row justify-start gap-2">
-        <Toggle.Root
-          onPressedChange={() => dispatch({ type: "setReasoning" })}
-          data-state={chat.isReasoning ? "on" : "off"}
-          className="flex flex-row gap-2 px-2 py-.75 items-center border-2 border-gray-5 rounded-md transition-all duration-300 ease-in-out hover:bg-gray-1 hover:data-[state=on]:bg-accent-7 data-[state=on]:bg-accent-9"
-        >
-          <MagicWandIcon />
-          <span className="text-sm">Reasoning</span>
-        </Toggle.Root>
+        {/* Reasoning Toggle */}
+        <Tooltip content="Toggle model reasoning abilities">
+          <Toggle.Root
+            onPressedChange={() => dispatch({ type: "setReasoning" })}
+            data-state={chat.isReasoning ? "on" : "off"}
+            className="flex flex-row gap-2 px-2 py-.75 items-center border-2 border-gray-5 rounded-md transition-all duration-300 ease-in-out hover:bg-gray-1 hover:data-[state=on]:bg-accent-7 data-[state=on]:bg-accent-9"
+          >
+            <MagicWandIcon />
+            <span className="text-sm">Reasoning</span>
+          </Toggle.Root>
+        </Tooltip>
 
-        <IconButton size={"2"} color="blue" variant="soft" disabled>
-          <UploadIcon className="h-4 w-4" />
-        </IconButton>
+        {/* Upload File */}
+        <Tooltip content={"COMING SOON: Upload files as additional context"}>
+          <IconButton size={"2"} color="blue" variant="soft" disabled>
+            <UploadIcon className="h-4 w-4" />
+          </IconButton>
+        </Tooltip>
 
-        <IconButton size={"2"} color="blue" variant="soft" disabled>
-          <CameraIcon className="w-4 h-4" />
-        </IconButton>
+        {/* Upload File */}
+        <Tooltip content={"COMING SOON: Upload images as additional context"}>
+          <IconButton size={"2"} color="blue" variant="soft" disabled>
+            <CameraIcon className="w-4 h-4" />
+          </IconButton>
+        </Tooltip>
       </div>
 
       <div className="flex flex-row justify-end gap-2">
