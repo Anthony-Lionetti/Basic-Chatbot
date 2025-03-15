@@ -10,3 +10,5 @@
 8. ~Create Reasoning markdown parsing~
 9. Adjust height with model output
 10. Add UI features for new chat and to click scroll to bottom of chat
+11. Update the chat feature to allow for more providers other than just Groq
+12. Create a simple API interface on the backend to add additional models if desired.
