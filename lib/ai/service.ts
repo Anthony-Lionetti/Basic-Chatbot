@@ -22,7 +22,8 @@ export class AIService {
     if (defaultProviderType && this.providers.has(defaultProviderType)) {
       this.defaultProvider = this.providers.get(defaultProviderType)!;
     } else if (this.providers.size > 0) {
-      this.defaultProvider = this.providers.values().next().value;
+      const firstProvider = this.providers.values().next().value;
+      this.defaultProvider = firstProvider || null;
     }
   }
   

@@ -96,13 +96,13 @@ export const Sidebar = () => {
         <div className="mt-4">
           {isOpen ? (
             <Card className="flex gap-2 items-center transition-colors duration-300 ease-in-out hover:bg-gray-4 hover:cursor-pointer">
-              <Avatar fallback="AL" size={"2"} />
+              <Avatar fallback="AL" size={"2"} color="green"/>
               <span className="text-sm text-gray-11">
                 lionetti.tech@gmail.com
               </span>
             </Card>
           ) : (
-            <Avatar fallback="AL" size={"2"} />
+            <Avatar fallback="AL" size={"2"} color="green" />
           )}
         </div>
       </div>

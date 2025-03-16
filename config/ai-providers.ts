@@ -13,7 +13,7 @@ const providersConfig: Record<string, ProviderConfig> = {
     type: 'ollama',
     enabled: Boolean(process.env.ENABLE_OLLAMA),
     baseUrl: process.env.OLLAMA_API_URL || 'http://localhost:11434',
-    defaultModel: 'llama3',
+    defaultModel: 'llama3.2:1b',
     defaultTemperature: 0.7
   }
 };

@@ -7,10 +7,12 @@ export interface ChatUserMessage {
   role: "user";
   content: string;
 }
+
 export interface ChatAssistantMessage {
   id: string;
   role: "assistant";
   content: string;
+  provider?: string; // Add provider information
 }
 
 export type ChatMessage =

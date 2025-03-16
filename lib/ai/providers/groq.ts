@@ -23,7 +23,8 @@ export class GroqProvider implements AIProvider {
   }
   
   async generateChatResponse(messages: Message[], options?: ChatOptions): Promise<StreamingResponse> {
-    // This replaces your current implementation in app/api/chat/route.ts
+    console.log("Using Groq")
+    
     const modelConfig = options?.reasoning
       ? {
           model: "deepseek-r1-distill-llama-70b",
