@@ -34,9 +34,7 @@ export default function ChatWrapper() {
     <div className="h-full flex flex-col">
       <div className="flex flex-row text-center justify-between py-4 items-center">
         <div className="flex-1" />
-        <h3 className="flex-1 justify-center text-2xl font-semibold text-accent-10">
-          Chatbot
-        </h3>
+        <h3 className="flex-1 justify-center text-2xl font-semibold text-accent-10">{" "}</h3>
         <div className="flex-1 justify-end">
           <ThemeToggle />
         </div>
