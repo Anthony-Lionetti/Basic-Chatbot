@@ -100,7 +100,6 @@ export function ChatInput({ ref }: { ref?: React.Ref<HTMLDivElement> }) {
         if (done) break;
 
         const chunk = decoder.decode(value);
-        console.log("Chunk Received: ", chunk)
 
         accumulatedMessage += chunk; // Accumulate locally
         dispatch({
