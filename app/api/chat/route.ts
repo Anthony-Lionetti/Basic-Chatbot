@@ -1,55 +1,61 @@
-import { Groq } from "groq-sdk";
-import { transformMessages } from "../(service)/util";
+// app/api/chat/route.ts
+import { NextRequest } from 'next/server';
+import { AIService } from '@/lib/ai/service';
+import providersConfig from '@/config/ai-providers';
+import { Message } from '@/lib/ai/types';
 
-// Initialize Groq client
-const groq = new Groq({
-  apiKey: process.env.GROQ_API_KEY,
-});
+// Initialize AI service
+const aiService = new AIService(providersConfig);
 
-export async function POST(req: Request) {
+export async function POST(req: NextRequest) {
   try {
     const data = await req.json();
+    // Extract the providerId from the request if present
+    const providerId = data.providerId;
+    
     // get new message and add it to the chat history
-    const newMessage = { role: "user", content: data.message };
-    const messages = transformMessages([...data.chatHistory, newMessage]);
+    const newMessage: Message = { role: "user", content: data.message };
+    
+    // Convert chat history to our internal format
+    const messages: Message[] = [
+      ...data.chatHistory.map((msg: any) => ({
+        role: msg.role,
+        content: msg.content
+      })),
+      newMessage
+    ];
 
-    // define necessary groq configurations based on request.
-    const modelConfig = data.isReasoning
-      ? {
-          model: "deepseek-r1-distill-llama-70b",
-          temperature: 0.6,
-          max_completion_tokens: 4096,
-          top_p: 0.95,
-          stop: null,
-        }
-      : { model: "llama3-70b-8192" };
+    // Generate response using AI service with the specified provider
+    const response = await aiService.generateChatResponse(
+      messages,
+      providerId, // Pass the provider ID if specified
+      {
+        reasoning: data.isReasoning,
+        temperature: data.temperature
+      }
+    );
 
-    // Create stream from Groq
-    const stream = await groq.chat.completions.create({
-      messages: messages,
-      ...modelConfig,
-      stream: true,
+    // Create a Text Encoder to send the stream
+    let accumulatedResponse = '';
+
+    // Create a pass-through stream to monitor the content
+    const transformStream = new TransformStream({
+      transform(chunk, controller) {
+        const text = new TextDecoder().decode(chunk);
+        accumulatedResponse += text;
+        controller.enqueue(chunk);
+      }
     });
 
-    // Create a TransformStream to convert Groq's stream to proper format
-    const encoder = new TextEncoder();
-
-    const readableStream = new ReadableStream({
-      async start(controller) {
-        for await (const chunk of stream) {
-          const content = chunk.choices[0]?.delta?.content || "";
-          controller.enqueue(encoder.encode(content));
-        }
-        controller.close();
-      },
-    });
+    // Pipe the provider stream through our transform stream
+    const outputStream = response.stream.pipeThrough(transformStream);
 
     // Return streaming response
-    return new Response(readableStream, {
+    return new Response(outputStream, {
       headers: {
         "Content-Type": "text/event-stream",
         "Cache-Control": "no-cache",
-        Connection: "keep-alive",
+        "Connection": "keep-alive",
       },
     });
   } catch (err) {

@@ -8,7 +8,27 @@ export function ChatInput({ ref }: { ref?: React.Ref<HTMLDivElement> }) {
   const dispatch = useChatDispatch();
   const chats = useChats();
   const [message, setMessage] = useState("");
+  const [selectedProvider, setSelectedProvider] = useState("groq"); // Default provider
   const textareaRef = useRef<HTMLTextAreaElement>(null);
+
+  // Fetch default provider on component mount
+  useEffect(() => {
+    const fetchDefaultProvider = async () => {
+      try {
+        const response = await fetch("/api/chat/provider");
+        if (response.ok) {
+          const data = await response.json();
+          if (data.defaultProvider) {
+            setSelectedProvider(data.defaultProvider.id);
+          }
+        }
+      } catch (error) {
+        console.error("Error fetching default provider:", error);
+      }
+    };
+
+    fetchDefaultProvider();
+  }, []);
 
   // Auto-resize textarea
   useEffect(() => {
@@ -18,6 +38,30 @@ export function ChatInput({ ref }: { ref?: React.Ref<HTMLDivElement> }) {
     }
   }, [message]);
 
+  const updateDefaultProvider = async (providerId: string) => {
+    try {
+      const response = await fetch("/api/chat/provider", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ providerId }),
+      });
+      
+      if (!response.ok) {
+        console.error("Failed to update default provider");
+      }
+    } catch (error) {
+      console.error("Error updating default provider:", error);
+    }
+  };
+
+  // And update the handleProviderChange function:
+  const handleProviderChange = (providerId: string) => {
+    setSelectedProvider(providerId);
+    updateDefaultProvider(providerId); // Update default on server
+  }; 
+  
   async function handleSubmit() {
     const trimmedMessage = message.trim();
     dispatch({ type: "setStreaming" });
@@ -38,9 +82,9 @@ export function ChatInput({ ref }: { ref?: React.Ref<HTMLDivElement> }) {
           chatHistory: chats.chatMessages,
           message: trimmedMessage,
           isReasoning: chats.isReasoning,
+          providerId: selectedProvider, // Include selected provider
         }),
       });
-
       if (!response.body) {
         throw Error("Response body is empty.");
       }
@@ -56,6 +100,7 @@ export function ChatInput({ ref }: { ref?: React.Ref<HTMLDivElement> }) {
         if (done) break;
 
         const chunk = decoder.decode(value);
+        console.log("Chunk Received: ", chunk)
 
         accumulatedMessage += chunk; // Accumulate locally
         dispatch({
@@ -88,6 +133,9 @@ export function ChatInput({ ref }: { ref?: React.Ref<HTMLDivElement> }) {
       handleSubmit();
     }
   };
+
+
+  
   const chatPosition =
     chats.chatMessages.length === 0
       ? "w-[50%] mx-auto fixed top-1/2 -translate-y-[50%] left-0 right-0"
@@ -121,6 +169,8 @@ export function ChatInput({ ref }: { ref?: React.Ref<HTMLDivElement> }) {
             message={message}
             isStreaming={chats.isStreaming}
             handleSubmit={handleSubmit}
+            selectedProvider={selectedProvider}
+            onProviderChange={handleProviderChange}
           />
         </div>
         <div className="mt-2 text-center">

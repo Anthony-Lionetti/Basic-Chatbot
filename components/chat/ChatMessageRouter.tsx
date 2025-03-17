@@ -21,7 +21,7 @@ export default function ChatMessageRouter({
   } else if ("role" in message && message.role === "user") {
     return <UserMessage {...message} />;
   } else if ("role" in message && message.role === "assistant") {
-    return <AssitantMessage {...message} />;
+    return <AssistantMessage {...message} />;
   }
   return null;
 }
@@ -79,10 +79,12 @@ function StreamingMessage({ content }: { content: string }) {
   );
 }
 
-function AssitantMessage(completion: ChatAssistantMessage) {
+
+function AssistantMessage(completion: ChatAssistantMessage) {
   const role = completion.role;
   const content = completion.content;
   const { cleaned, thoughts } = processReasoningContent(content);
+  const provider = completion.provider || "default"; // Add provider info
 
   return (
     <>
@@ -100,12 +102,17 @@ function AssitantMessage(completion: ChatAssistantMessage) {
               data-message-author-role={role}
               className="min-h-8 text-message flex w-full flex-col items-end gap-2 whitespace-normal break-words text-start"
             >
+              {/* Provider indicator */}
+              {provider !== "default" && (
+                <div className="self-start text-xs text-gray-9 mb-1">
+                  Powered by {provider}
+                </div>
+              )}
               <div className="flex w-full flex-col gap-1 empty:hidden first:pt-[3px]">
                 {thoughts.length != 0 && (
                   <ReasoningOutput thoughts={thoughts} />
                 )}
                 <CustomMarkdown content={cleaned} />
-                {/* {content} */}
               </div>
             </div>
           </div>
