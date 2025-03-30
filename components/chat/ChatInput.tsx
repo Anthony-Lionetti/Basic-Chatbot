@@ -3,8 +3,11 @@ import React, { useState, useRef, useEffect } from "react";
 import InputControls from "./InputControls";
 import { useChatDispatch, useChats } from "@/context/ChatProvider";
 import { v4 as uuidv4 } from "uuid";
+import { usePathname } from "next/navigation";
 
 export function ChatInput({ ref }: { ref?: React.Ref<HTMLDivElement> }) {
+  const path = usePathname();
+  console.log("Path:", path);
   const dispatch = useChatDispatch();
   const chats = useChats();
   const [message, setMessage] = useState("");
@@ -47,7 +50,7 @@ export function ChatInput({ ref }: { ref?: React.Ref<HTMLDivElement> }) {
         },
         body: JSON.stringify({ providerId }),
       });
-      
+
       if (!response.ok) {
         console.error("Failed to update default provider");
       }
@@ -60,8 +63,8 @@ export function ChatInput({ ref }: { ref?: React.Ref<HTMLDivElement> }) {
   const handleProviderChange = (providerId: string) => {
     setSelectedProvider(providerId);
     updateDefaultProvider(providerId); // Update default on server
-  }; 
-  
+  };
+
   async function handleSubmit() {
     const trimmedMessage = message.trim();
     dispatch({ type: "setStreaming" });
@@ -133,8 +136,6 @@ export function ChatInput({ ref }: { ref?: React.Ref<HTMLDivElement> }) {
     }
   };
 
-
-  
   const chatPosition =
     chats.chatMessages.length === 0
       ? "w-[50%] mx-auto fixed top-1/2 -translate-y-[50%] left-0 right-0"
@@ -145,7 +146,7 @@ export function ChatInput({ ref }: { ref?: React.Ref<HTMLDivElement> }) {
       {chats.chatMessages.length === 0 && (
         <div className="flex flex-col justify-center gap-2 pb-4">
           <h3 className="text-center text-4xl font-bold text-accent-9">
-            Chatbot
+            {path === "/" ? "Chatbot" : "Assistant"}
           </h3>
           <p className="text-center text-xl font-semibold text-accent-12">
             How can we be of service today?

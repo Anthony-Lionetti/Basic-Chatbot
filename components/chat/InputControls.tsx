@@ -2,7 +2,7 @@
 "use client";
 import React from "react";
 import { Toggle } from "radix-ui";
-import { IconButton, Tooltip } from "@radix-ui/themes";
+import { Button, IconButton, Tooltip } from "@radix-ui/themes";
 import {
   CameraIcon,
   MagicWandIcon,
@@ -34,6 +34,16 @@ export default function InputControls({
   return (
     <div className="flex flex-row pb-2 px-3 justify-between items-center">
       <div className="flex flex-row justify-start gap-2">
+        {chat.chatMessages.length === 0 && (
+          <Tooltip content="Create a New Chat Assistant">
+            <Link href={service === "chat" ? "/assistants" : "/"}>
+              <Button variant="soft" className="cursor-pointer">
+                {service === "chat" ? "New Assistant" : "New Chat"}
+              </Button>
+            </Link>
+          </Tooltip>
+        )}
+
         {/* Reasoning Toggle */}
         {selectedProvider != "ollama" && (
           <Tooltip content="Toggle model reasoning abilities">

@@ -1,14 +1,16 @@
 "use client";
 import React, { useEffect, useRef, useState } from "react";
-import ChatMessages from "./ChatMessages";
-import { ThemeToggle } from "../ThemeToggle";
+import ChatMessages from "./messages/ChatMessages";
 import { useChats } from "@/context/ChatProvider";
+import ChatHeader from "./ChatHeader";
+import { usePathname } from "next/navigation";
 
 export default function ChatWrapper() {
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
   const scrollContainerRef = useRef<HTMLDivElement | null>(null);
   const [userInterrupted, setUserInterrupted] = useState(false);
   const chatHistory = useChats();
+  const path = usePathname();
 
   const handleScroll = () => {
     // Only set interrupted if we're currently streaming a message
@@ -34,7 +36,9 @@ export default function ChatWrapper() {
     <div className="h-full flex flex-col">
       <div className="flex flex-row text-center justify-between py-4 items-center">
         <div className="flex-1" />
-        <h3 className="flex-1 justify-center text-2xl font-semibold text-accent-10">{" "}</h3>
+        <h3 className="flex-1 justify-center text-2xl font-semibold text-accent-10">
+          {" "}
+        </h3>
         <div className="flex-1 justify-end">
           <ThemeToggle />
         </div>

@@ -4,11 +4,15 @@ import {
   ChevronUpIcon,
   PinLeftIcon,
   PinRightIcon,
+  ChevronUpIcon,
+  PinLeftIcon,
+  PinRightIcon,
   PlusIcon,
 } from "@radix-ui/react-icons";
 import Link from "next/link";
 import { Avatar, Card, Tooltip } from "@radix-ui/themes";
 
+export function Sidebar() {
 export function Sidebar() {
   const conversations = useMockHistory();
   const [isHovered, setIsHovered] = useState(false);
@@ -21,7 +25,9 @@ export function Sidebar() {
     <div
       className={`
       fixed h-screen bg-gray-2
+      fixed h-screen bg-gray-2
       transition-all duration-300 ease-in-out z-10
+      ${isOpen ? "w-64" : "w-0"}
       ${isOpen ? "w-64" : "w-0"}
     `}
       onMouseEnter={() => setIsHovered(true)}
@@ -58,12 +64,30 @@ export function Sidebar() {
           >
             <PlusIcon className="w-5 h-5 font-bold" />
             <p className="font-semibold text-md">New Chat</p>
+            <Tooltip content="Pin taskbar">
+              <button
+                onClick={() => setIsPinned(!isPinned)}
+                className="h-6 w-6 p-1 rounded-md bg-gray-5"
+              >
+                {isPinned ? <PinLeftIcon /> : <PinRightIcon />}
+              </button>
+            </Tooltip>
+          )}
+        </div>
+
+        {isOpen && (
+          <Card
+            className={`flex w-full bg-accent-8 flex-row gap-3 items-center px-2 py-1 transition-color duration-300 ease-in-out hover:cursor-pointer hover:bg-accent-7`}
+          >
+            <PlusIcon className="w-5 h-5 font-bold" />
+            <p className="font-semibold text-md">New Chat</p>
           </Card>
         )}
         {/* Conversation List */}
         <div className="flex-1 space-y-1 overflow-y-auto mt-12">
           {isOpen && (
             <>
+              <h4 className="text-lg font-semibold gray-12 mb-2">History</h4>
               <h4 className="text-lg font-semibold gray-12 mb-2">History</h4>
 
               <div className="flex flex-col gap-2">
@@ -97,6 +121,7 @@ export function Sidebar() {
                 lionetti.tech@gmail.com
               </span>
               <ChevronUpIcon />
+              <ChevronUpIcon />
             </Card>
           ) : (
             <div className="p-2">
@@ -107,6 +132,7 @@ export function Sidebar() {
       </div>
     </div>
   );
+}
 }
 
 function useMockHistory() {

@@ -65,10 +65,12 @@ The application is built with Next.js 15 and follows a modern React architecture
 ### Key Components
 
 - **Context Providers**:
+
   - `ThemeContext` - Manages light/dark theme
   - `ChatProvider` - Manages chat state and message history
 
 - **API Routes**:
+
   - `/api/chat` - Main endpoint for chat completions
   - `/api/chat/provider` - Endpoint for managing AI providers
 
