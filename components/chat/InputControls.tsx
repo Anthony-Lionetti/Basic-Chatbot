@@ -1,6 +1,6 @@
 // components/chat/InputControls.tsx
 "use client";
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { Toggle } from "radix-ui";
 import { IconButton, Tooltip } from "@radix-ui/themes";
 import {
@@ -30,12 +30,12 @@ export default function InputControls({
   // Chat context to see if we need to use the reasoning model
   const chat = useChats();
   const dispatch = useChatDispatch();
-  
+
   return (
     <div className="flex flex-row pb-2 px-3 justify-between items-center">
       <div className="flex flex-row justify-start gap-2">
         {/* Reasoning Toggle */}
-        {selectedProvider != "ollama" && 
+        {selectedProvider != "ollama" && (
           <Tooltip content="Toggle model reasoning abilities">
             <Toggle.Root
               onPressedChange={() => dispatch({ type: "setReasoning" })}
@@ -46,7 +46,7 @@ export default function InputControls({
               <span className="text-sm">Reasoning</span>
             </Toggle.Root>
           </Tooltip>
-        }
+        )}
 
         {/* Provider Selector */}
         <ProviderSelector
