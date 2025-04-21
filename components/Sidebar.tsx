@@ -4,15 +4,11 @@ import {
   ChevronUpIcon,
   PinLeftIcon,
   PinRightIcon,
-  ChevronUpIcon,
-  PinLeftIcon,
-  PinRightIcon,
   PlusIcon,
 } from "@radix-ui/react-icons";
 import Link from "next/link";
 import { Avatar, Card, Tooltip } from "@radix-ui/themes";
 
-export function Sidebar() {
 export function Sidebar() {
   const conversations = useMockHistory();
   const [isHovered, setIsHovered] = useState(false);
@@ -24,7 +20,6 @@ export function Sidebar() {
   return (
     <div
       className={`
-      fixed h-screen bg-gray-2
       fixed h-screen bg-gray-2
       transition-all duration-300 ease-in-out z-10
       ${isOpen ? "w-64" : "w-0"}
@@ -72,6 +67,7 @@ export function Sidebar() {
                 {isPinned ? <PinLeftIcon /> : <PinRightIcon />}
               </button>
             </Tooltip>
+            </Card>
           )}
         </div>
 
@@ -129,10 +125,9 @@ export function Sidebar() {
             </div>
           )}
         </div>
+      
       </div>
-    </div>
   );
-}
 }
 
 function useMockHistory() {
